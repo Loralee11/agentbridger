@@ -1,4 +1,4 @@
-entrypoint = "index.js"
+entrypoint = ".replit-init.sh"
 modules = ["nodejs-22"]
 hidden = [".config", "package-lock.json"]
 
@@ -9,12 +9,14 @@ requiredFiles = [".replit", "replit.nix", "package.json", "package-lock.json"]
 channel = "stable-24_11"
 
 [deployment]
-run = ["node", "server.js"]
+# Add auto-push to GitHub before deployment runs
+run = ["bash", ".replit-init.sh"]
 deploymentTarget = "autoscale"
 ignorePorts = false
 
 [run]
-command = "node server.js"
+# Also run push+server locally
+command = "bash .replit-init.sh"
 
 [[ports]]
 localPort = 3000
