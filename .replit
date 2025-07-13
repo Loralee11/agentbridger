@@ -10,17 +10,13 @@ channel = "stable-24_11"
 packages = ["opensshWithKerberos"]
 
 [deployment]
-# Add auto-push to GitHub before deployment runs
 run = ["bash", ".replit-init.sh"]
 deploymentTarget = "autoscale"
 ignorePorts = false
 
 [run]
-# Also run push+server locally
 command = "bash .replit-init.sh"
 
 [[ports]]
 localPort = 3000
 externalPort = 80
-[run]
-command = "bash .replit-init.sh"

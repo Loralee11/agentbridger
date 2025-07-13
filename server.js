@@ -36,46 +36,66 @@ app.post("/relay-test", (req, res) => {
   res.json({ status: "OK", received: true });
 });
 
-// Existing: root test
-app.get("/", (req, res) => {
-  res.send("Relay Server is active");
-});
+// ✅ New endpoint: POST /relay — now with file write
+app.post("/relay", (req, res) => {
+  const payload = req.body;
 
-// Existing: submit-fix
-app.post("/submit-fix", (req, res) => {
-  const { filename, code } = req.body;
-
-  if (!filename || !code) {
-    return res.status(400).json({ error: "filename and code required" });
+  if (config.logMode === "verbose") {
+    console.log("[/relay] Incoming payload:");
+    console.log(JSON.stringify(payload, null, 2));
   }
 
-  const targetPath = path.join(__dirname, "fixes", filename);
+  const dir = path.join(__dirname, "relay_tasks");
+  fs.mkdirSync(dir, { recursive: true });
 
-  // Ensure /fixes folder exists
-  fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const filename = `relay_${timestamp}.json`;
+  const filepath = path.join(dir, filename);
 
-  fs.writeFile(targetPath, code, "utf8", (err) => {
+  fs.writeFile(filepath, JSON.stringify(payload, null, 2), "utf-8", (err) => {
     if (err) {
-      console.error("Error writing fix:", err);
+      console.error("❌ Failed to write file!");
+      console.error(err.stack || err);
       return res.status(500).json({ error: "Failed to write file" });
     }
 
-    console.log(`Fix saved: ${filename}`);
-    res.status(200).json({ message: "Fix saved" });
+    console.log(`✅ Relay file saved: ${filename}`);
+    res.status(200).json({
+      status: "received_and_saved",
+      filename,
+      timestamp: new Date().toISOString(),
+    });
   });
 });
 
-// Existing: test route
-app.get("/test", (req, res) => {
-  res.json({
-    status: "OK",
-    message: "Test route is working.",
-    timestamp: new Date().toISOString(),
+// ✅ Rewritten: POST /incoming — ChatGPT submits task
+app.post("/incoming", (req, res) => {
+  const task = req.body;
+
+  if (!task || !task.from || !task.task || !task.replyTo) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const dir = path.join(__dirname, "relay_tasks");
+  fs.mkdirSync(dir, { recursive: true });
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const filename = `incoming_${timestamp}.json`;
+  const filepath = path.join(dir, filename);
+
+  fs.writeFile(filepath, JSON.stringify(task, null, 2), "utf-8", (err) => {
+    if (err) {
+      console.error("❌ Failed to save incoming task!");
+      console.error(err.stack || err);
+      return res.status(500).json({ error: "Write failed" });
+    }
+
+    console.log(`✅ Incoming task saved: ${filename}`);
+    res.status(200).json({
+      status: "received_and_saved",
+      filename,
+      timestamp: new Date().toISOString(),
+    });
   });
 });
 
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Relay server listening on port ${PORT}`);
-});

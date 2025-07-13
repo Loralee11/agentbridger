@@ -1,13 +1,21 @@
 #!/bin/bash
 
-# Start SSH agent and add key (needed for git push to work reliably)
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
+# Skip Git auto-push in recovery mode
+echo "⚠️  Skipping Git push in recovery mode"
 
-# Auto-push logic before running app
-git add .
-git commit -m "Auto-deploy commit from Replit" || echo "No new changes to commit"
-git push origin main || echo "Git push failed"
+# Diagnostic: Show current directory and node version
+echo "📂 Current directory: $(pwd)"
+ls -l
+echo "🧪 Node version: $(node -v 2>/dev/null || echo 'not found')"
 
-# Then start the server
-node server.js
+# Check if node is available
+if command -v node &> /dev/null
+then
+  echo "✅ Node.js available — starting AgentBridger relay server..."
+  echo "🌐 Relay server starting on port 3000..."
+  node server.js
+else
+  echo "❌ Node.js not available — skipping server start"
+fi
+
+
