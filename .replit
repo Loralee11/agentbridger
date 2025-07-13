@@ -22,3 +22,5 @@ command = "bash .replit-init.sh"
 [[ports]]
 localPort = 3000
 externalPort = 80
+[run]
+command = "bash .replit-init.sh"

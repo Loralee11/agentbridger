@@ -17,12 +17,31 @@ app.use((req, res, next) => {
   next();
 });
 
-// Test endpoint to confirm it works
+// ✅ Load config.json if present
+let config = { logMode: "verbose" };
+try {
+  const configFile = fs.readFileSync("config.json", "utf-8");
+  config = JSON.parse(configFile);
+} catch (err) {
+  console.log("No config.json found or invalid — using default config.");
+}
+
+// ✅ New endpoint: POST /relay-test
+app.post("/relay-test", (req, res) => {
+  const payload = req.body;
+  if (config.logMode === "verbose") {
+    console.log("[/relay-test] Payload received:");
+    console.log(JSON.stringify(payload, null, 2));
+  }
+  res.json({ status: "OK", received: true });
+});
+
+// Existing: root test
 app.get("/", (req, res) => {
   res.send("Relay Server is active");
 });
 
-// Endpoint to receive fix suggestions from ChatGPT
+// Existing: submit-fix
 app.post("/submit-fix", (req, res) => {
   const { filename, code } = req.body;
 
@@ -34,7 +53,7 @@ app.post("/submit-fix", (req, res) => {
 
   // Ensure /fixes folder exists
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-  // Write file
+
   fs.writeFile(targetPath, code, "utf8", (err) => {
     if (err) {
       console.error("Error writing fix:", err);
@@ -45,7 +64,8 @@ app.post("/submit-fix", (req, res) => {
     res.status(200).json({ message: "Fix saved" });
   });
 });
-// Test route to verify server is running
+
+// Existing: test route
 app.get("/test", (req, res) => {
   res.json({
     status: "OK",
