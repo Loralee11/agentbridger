@@ -1,0 +1,5 @@
+{
+  "from": "ChatGPT",
+  "task": "test outbound post",
+  "replyTo": "http://localhost:3000/relay-test"
+}

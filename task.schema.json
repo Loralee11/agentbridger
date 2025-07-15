@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["from", "task", "replyTo"],
+  "properties": {
+    "from": {
+      "type": "string",
+      "enum": ["ChatGPT", "ReplitAI"]
+    },
+    "task": {
+      "type": "string",
+      "enum": ["create file", "update file", "log", "send", "confirm"]
+    },
+    "filename": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "replyTo": {
+      "type": "string",
+      "format": "uri"
+    },
+    "taskId": {
+      "type": "string"
+    },
+    "manual_approval": {
+      "type": "boolean"
+    },
+    "manualApproval": {
+      "type": "boolean"
+    },
+    "phase": {
+      "type": "integer"
+    },
+    "nextAction": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

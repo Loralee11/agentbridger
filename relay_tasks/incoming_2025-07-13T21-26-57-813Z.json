@@ -1,0 +1,6 @@
+{
+  "from": "ChatGPT",
+  "task": "log",
+  "content": "Hello from test task!",
+  "replyTo": "http://localhost:3000/confirm"
+}

@@ -1,0 +1,10 @@
+{
+  "error": "getaddrinfo ENOTFOUND agentbridger.kimlyhla11.repl.co",
+  "payload": {
+    "from": "ChatGPT",
+    "task": "confirm",
+    "taskId": "test-task-123",
+    "content": "Hello from outbound test task!",
+    "replyTo": "https://agentbridger.kimlyhla11.repl.co/confirm"
+  }
+}

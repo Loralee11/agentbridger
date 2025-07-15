@@ -1,0 +1,10 @@
+{
+  "error": "Request failed with status code 400",
+  "payload": {
+    "from": "ChatGPT",
+    "task": "confirm",
+    "taskId": "test-task-123",
+    "content": "Hello from outbound test task!",
+    "replyTo": "http://localhost:3000/confirm"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "error": "Request failed with status code 403",
+  "payload": {
+    "from": "ChatGPT",
+    "task": "log",
+    "replyTo": "https://example.com"
+  }
+}

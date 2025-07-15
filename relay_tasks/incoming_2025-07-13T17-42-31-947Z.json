@@ -1,0 +1,5 @@
+{
+  "from": "ChatGPT",
+  "task": "Save this task and auto-POST back",
+  "replyTo": "http://localhost:3000/relay-test"
+}
